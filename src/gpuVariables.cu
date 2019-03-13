@@ -125,7 +125,7 @@ __constant__ int ntypesGPU;
 __constant__ double cutoffnearGPU; //!*R A constant to avoid overlapping
 
 particle_type *pt;
-
+__constant__ bool LJParameterFileProvidedGPU;
 
 
 __constant__ int mxGPU, myGPU, mzGPU;

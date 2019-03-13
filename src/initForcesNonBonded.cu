@@ -45,11 +45,12 @@ bool initForcesNonBonded(){
   //!*R initialization of the particle type interaction
   double cutoffnear = 1.0; 
   int ntypes = 1;
-  double *Aij_param;
+  double *Aij_param;  
   double *Bij_param;
+  Aij_param = new double[ntypes*ntypes];
+  Bij_param = new double[ntypes*ntypes];
+    
   if(false/* || loadparticles==0*/){ //Always reads from the file
-    Aij_param = new double[ntypes*ntypes];
-    Bij_param = new double[ntypes*ntypes];
     for(int i=0; i<ntypes; i++){
       for(int j=0; j<ntypes; j++){
         float sigma, epsilon;
@@ -60,25 +61,23 @@ bool initForcesNonBonded(){
       }
     }
   }
-   else{
-     ifstream in("LJ.in");
-     in>>ntypes;
-     Aij_param = new double[ntypes*ntypes];
-     Bij_param = new double[ntypes*ntypes];
-     float sigma, epsilon;
-     sigma = 2 * lx / float(mx); //READ FROM FILE
-     epsilon = 1;
-	
-     for(int i=0; i<ntypes; i++)for(int j=0; j<ntypes; j++){
-        in>>Aij_param[i+ntypes*j];
-      }
+  else{
+    ifstream in(LJParameterFile);
+    LJParameterFileProvided = false;
+    if(in.good()){
+      LJParameterFileProvided = true;
+      in>>ntypes;
+      Aij_param = new double[ntypes*ntypes];
+      Bij_param = new double[ntypes*ntypes];
+      for(int i=0; i<ntypes; i++)for(int j=0; j<ntypes; j++){
+	  in>>Aij_param[i+ntypes*j];
+	}
      
-     for(int i=0; i<ntypes; i++)for(int j=0; j<ntypes; j++){
-        in>>Bij_param[i+ntypes*j];
-      }
-     
-     in>>cutoffnear;
-}
+      for(int i=0; i<ntypes; i++)for(int j=0; j<ntypes; j++){
+	  in>>Bij_param[i+ntypes*j];
+	}
+    }
+  }
   //!*R Upload all the information to the GPU
   cudaMalloc((void **)&Aij_paramGPU, ntypes*ntypes*sizeof(double));
   cudaMalloc((void **)&Bij_paramGPU, ntypes*ntypes*sizeof(double));
@@ -87,7 +86,8 @@ bool initForcesNonBonded(){
   cudaMemcpy(Bij_paramGPU, Bij_param, ntypes*ntypes*sizeof(double), cudaMemcpyHostToDevice);
   cudaMemcpyToSymbol(ntypesGPU, &ntypes, sizeof(int));
   cudaMemcpyToSymbol(cutoffnearGPU, &cutoffnear, sizeof(double));
-  
+  cudaMemcpyToSymbol(LJParameterFileProvidedGPU, &LJParameterFileProvided, sizeof(bool));
+
 
 
 
@@ -107,15 +107,6 @@ bool initForcesNonBonded(){
   cutilSafeCall( cudaMallocArray( &forceNonBonded1, &channelDesc, size, 1 )); 
   cutilSafeCall( cudaMemcpyToArray( forceNonBonded1, 0, 0, h_data, size*sizeof(float), cudaMemcpyHostToDevice));
   cutilSafeCall( cudaBindTextureToArray( texforceNonBonded1, forceNonBonded1, channelDesc));
-
-  /*
-  r = 0.5 * dr;
-    for(int i=0;i<size;i++){
-    cout << r << " " << h_data[i] << endl;
-    r += dr;
-    }
-    exit(0);
-*/
   cout << "INIT FORCE NON-BONDED 1 COMPLETED" << endl;
   delete[] h_data;
   //!*R clean up

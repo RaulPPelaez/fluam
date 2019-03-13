@@ -86,4 +86,5 @@ EXTERN_PARTICLES int *threeCumulativeIndex;
 
 
 
-
+EXTERN_PARTICLES string LJParameterFile;
+EXTERN_PARTICLES bool LJParameterFileProvided;
