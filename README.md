@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-###About this branch
+### About this branch
 This branch is only tested with **Stokes limit** and **Quasi Neutrally Buoyant**!!
 
 The **Colors** functionality allows you to stablish a different interaction for every pair based on an assigned particle type. Currently included only for the Stokes Limit and QuasiNeutrallyBuoyant schemes
@@ -61,14 +60,14 @@ There is a new optional entry **threeBondedForces** in data.main. This allows yo
     The order of the bonds in the file does not matter
 
 
-###New Features implemented.
+### New Features implemented.
 Floren introduced **BigSystem**, which allows tu run simulations in which ncells*Nmaxneighboursincell > 2^27 by using arrays instead of texture memory.
 
 To use this feature set the option BigSystem to 1. Currently working only in the **stokesLimit** scheme.
   
 
-####Fluam a fluctuating hydrodynamic code
-###Contents
+#### Fluam a fluctuating hydrodynamic code
+### Contents
 =======
 # Fluam a fluctuating hydrodynamic code
 
