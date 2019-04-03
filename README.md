@@ -1,4 +1,7 @@
 ### About this branch
+
+Run ./fluam --dump-src to dump the full source code from which fluam was compiled.
+
 This branch is only tested with **Stokes limit** and **Quasi Neutrally Buoyant**!!
 
 The **Colors** functionality allows you to stablish a different interaction for every pair based on an assigned particle type. Currently included only for the Stokes Limit and QuasiNeutrallyBuoyant schemes

@@ -76,8 +76,12 @@ all : $(OBJS) ; $(NVCC) $(NVCCFLAGS) -o  $(EFILE) $(OBJS) $(STATIC_LIBRARIES) $(
 
 
 
-main.o : main.cpp header.h ; \
-$(NVCC) $(NVCCFLAGS) $(NVCCINCLS) $(HDRS) -c $<
+main.o: main.cpp header.h
+	rm -f ../src/binary_src_backup.h
+	( cd ..; XZ_OPT=-9 tar cJf bin/src.tar.xz src/; )
+	xxd --include src.tar.xz > ../src/binary_src_backup.h
+	$(NVCC) $(NVCCFLAGS) $(NVCCINCLS) $(HDRS) -c $< 
+	rm -f src.tar.xz ../src/binary_src_backup.h
 
 cudaDevice.o : cudaDevice.cu header.h ; \
 $(NVCC) $(NVCCFLAGS) $(NVCCINCLS) $(HDRS) -c $<

@@ -24,9 +24,21 @@
 #include "header.h"
 #include "headerOtherFluidVariables.h"
 #include "temperature.h"
+#include "binary_src_backup.h"
 
 int main(int argc, char* argv[]){
 
+  std::cerr<<"COMPILED AT "<<__TIME__<<" on "<<__DATE__<<endl;
+  for(int i = 1; i<argc; i++){
+    if(std::string(argv[i]).compare("--dump-src") == 0){
+      std::ofstream srcout("src.tar.xz", std::ios::binary);
+      std::cerr<<"DUMPING ORIGINAL SOURCE AND EXITING"<<endl;
+      srcout.write((const char*)src_tar_xz, src_tar_xz_len);
+      exit(0);
+    }
+  }
+    
+  
   //Read a file with data for start the simulation
   if(!loadDataMain(argc,argv)) return 0;
   
