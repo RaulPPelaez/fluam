@@ -61,7 +61,9 @@ bool saveParticles(int option, long long step){
     if(quasiNeutrallyBuoyant) 
       fileVelocityI << step * dt << endl;
     for(int i=0;i<np;i++){
-      file << rxParticle[i] << " " << ryParticle[i] << " " << rzParticle[i] << endl;
+      file << rxParticle[i] << " " << ryParticle[i] << " " << rzParticle[i];
+      if(loadcolors) file<<" " << particle_types[i];
+      file<<"\n";
       if(!(stokesLimitFirstOrder or stokesLimitFirstOrder or quasi2D)){
 	fileVelocity << vxParticle[i] << " " << vyParticle[i] << " " << vzParticle[i] << endl;
       }
@@ -69,7 +71,9 @@ bool saveParticles(int option, long long step){
       if(quasiNeutrallyBuoyant || quasiNeutrallyBuoyant2D) 
 	fileVelocityI << vxParticleI[i] << " " << vyParticleI[i] << " " << vzParticleI[i] << endl;
     }
+    file<<std::flush;
   }
+
   else if(option == 2){
     file.close();
     if(!(stokesLimitFirstOrder or stokesLimitFirstOrder or quasi2D)){
