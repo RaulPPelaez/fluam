@@ -227,6 +227,7 @@ bool loadDataMain(int argc, char* argv[]){
   saffmanLayerWidth = 0.0;
 
 
+  LJParameterFileProvided = false;
   //Raul Added. Viscosity measure parameters
   viscosityMeasureMode = 0.0;
   viscosityMeasurePlane = 0.0;
@@ -659,6 +660,7 @@ bool loadDataMain(int argc, char* argv[]){
       fileinput >> confinementZK;
     }
     else if(word==wLJParameters){
+      LJParameterFileProvided = true;
       fileinput>>LJParameterFile;
     }
 

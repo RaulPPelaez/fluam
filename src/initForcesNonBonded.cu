@@ -62,22 +62,27 @@ bool initForcesNonBonded(){
     }
   }
   else{
-    ifstream in(LJParameterFile);
-    LJParameterFileProvided = false;
-    if(in.good()){
-      LJParameterFileProvided = true;
-      in>>ntypes;
-      Aij_param = new double[ntypes*ntypes];
-      Bij_param = new double[ntypes*ntypes];
-      for(int i=0; i<ntypes; i++)for(int j=0; j<ntypes; j++){
-	  in>>Aij_param[i+ntypes*j];
-	}
+    if(LJParameterFileProvided){
+      ifstream in(LJParameterFile);   
+      if(in.good()){
+	in>>ntypes;
+	Aij_param = new double[ntypes*ntypes];
+	Bij_param = new double[ntypes*ntypes];
+	for(int i=0; i<ntypes; i++)for(int j=0; j<ntypes; j++){
+	    in>>Aij_param[i+ntypes*j];
+	  }
      
-      for(int i=0; i<ntypes; i++)for(int j=0; j<ntypes; j++){
-	  in>>Bij_param[i+ntypes*j];
-	}
+	for(int i=0; i<ntypes; i++)for(int j=0; j<ntypes; j++){
+	    in>>Bij_param[i+ntypes*j];
+	  }
+      }
+      else{
+	cerr<<"ERROR!: Cannot open LJ parameters file "<<LJParameterFile<<endl;
+
+      }
     }
   }
+    
   //!*R Upload all the information to the GPU
   cudaMalloc((void **)&Aij_paramGPU, ntypes*ntypes*sizeof(double));
   cudaMalloc((void **)&Bij_paramGPU, ntypes*ntypes*sizeof(double));
