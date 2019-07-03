@@ -72,7 +72,7 @@ __device__ void forceBondedParticleParticleGPU(const int i,
     y = fetch_double(texryboundaryGPU,nboundaryGPU+index);
     z = fetch_double(texrzboundaryGPU,nboundaryGPU+index);
     
-    r0 = (int) bFV->r0ParticleParticleGPU[offset+j];
+    r0 = bFV->r0ParticleParticleGPU[offset+j];
 	
 
  
